@@ -1,79 +1,79 @@
 #!/bin/ash
 
 # =========================================================
-# ¡¾ÇëĞŞ¸ÄÒÔÏÂ±äÁ¿ - ÓÃ»§ÅäÖÃÇø¡¿
+# ã€è¯·ä¿®æ”¹ä»¥ä¸‹å˜é‡ - ç”¨æˆ·é…ç½®åŒºã€‘
 # =========================================================
 
-# 1. ÄúµÄÔ­Ê¼ÕËºÅ 
+# 1. æ‚¨çš„åŸå§‹è´¦å· 
 USERNAME=""
 
-# 2. ÄúµÄÃÜÂë
+# 2. æ‚¨çš„å¯†ç 
 PASSWORD=""
 
-# 3. ÔËÓªÉÌºó×º 
-# Ê¾Àı£º@gxylt
+# 3. è¿è¥å•†åç¼€ 
+# ç¤ºä¾‹ï¼š@gxylt
 OPERATOR_SUFFIX="@gxylt"
 
-# 4. WAN¿ÚÃû³Æ (Í¨³£ÊÇ eth0.2 »ò eth1 µÈ£¬¿ÉÍ¨¹ı ifconfig »ò LuCI ½çÃæ²é¿´)
+# 4. WANå£åç§° (é€šå¸¸æ˜¯ eth0.2 æˆ– eth1 ç­‰ï¼Œå¯é€šè¿‡ ifconfig æˆ– LuCI ç•Œé¢æŸ¥çœ‹)
 WAN_INTERFACE="wlan1" 
 
-# 5. ÈÏÖ¤·şÎñÆ÷¶Ë¿Ú¼° IP 
+# 5. è®¤è¯æœåŠ¡å™¨ç«¯å£åŠ IP 
 PORTAL_HOST_PORT="211.69.15.10:6060" 
 
-# 6. ÒÆ¶¯Éè±¸ UA (Ä£Äâ Edge/Chrome ÊÖ»úä¯ÀÀÆ÷) - ¡¾ÒÑĞŞ¸Ä¡¿
+# 6. ç§»åŠ¨è®¾å¤‡ UA (æ¨¡æ‹Ÿ Edge/Chrome æ‰‹æœºæµè§ˆå™¨)
 MOBILE_UA="Mozilla/5.0 (Linux; Android 10; SM-G981B) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.6045.163 Mobile Safari/537.36 EdgA/119.0.2151.72" 
 
 # =========================================================
-# ¡¾½Å±¾ºËĞÄÂß¼­ - ÎŞĞèĞŞ¸Ä¡¿
+# ã€è„šæœ¬æ ¸å¿ƒé€»è¾‘ã€‘
 # =========================================================
 
-# ÍêÕûÈÏÖ¤ URL Â·¾¶ (²»º¬ Host ºÍ²ÎÊı)
+# å®Œæ•´è®¤è¯ URL è·¯å¾„ (ä¸å« Host å’Œå‚æ•°)
 LOGIN_PATH="/quickauth.do"
 
-# ¹Ì¶¨µÄ AC ²ÎÊı (¸ù¾İÄúµÄÈÕÖ¾)
+# å›ºå®šçš„ AC å‚æ•° 
 WLAN_ACNAME="HAIT-SR8808"
 WLAN_ACIP="172.21.8.73"
 PORTAL_PAGEID="21"
 PORTAL_TYPE="0"
 
-# ÍêÕûµÄÈÏÖ¤ URL
+# å®Œæ•´çš„è®¤è¯ URL
 LOGIN_URL="http://${PORTAL_HOST_PORT}${LOGIN_PATH}"
 
-# 1. ¼ì²éÍøÂçÁ¬Í¨ĞÔ (³¢ÊÔ ping °Ù¶È£¬Èç¹û³É¹¦ÔòÈÏÎªÒÑÈÏÖ¤)(¼ì²âÂß¼­ÓĞÎÊÌâ£¬²»Ê¹ÓÃ)
+# 1. æ£€æŸ¥ç½‘ç»œè¿é€šæ€§ (å°è¯• ping ç™¾åº¦ï¼Œå¦‚æœæˆåŠŸåˆ™è®¤ä¸ºå·²è®¤è¯)(æ£€æµ‹é€»è¾‘æœ‰é—®é¢˜ï¼Œä¸è¦ä½¿ç”¨)
 #check_online() {
-#    # -q: ¾²Ä¬£¬-T 5: ³¬Ê± 5Ãë£¬--spider: ²»ÏÂÔØÎÄ¼ş
+#    # -q: é™é»˜ï¼Œ-T 5: è¶…æ—¶ 5ç§’ï¼Œ--spider: ä¸ä¸‹è½½æ–‡ä»¶
 #    wget -q -T 5 --spider http://www.baidu.com
 #    return $?
 #}
 
-# 2. »ñÈ¡ WAN ¿Ú IP (¼´ wlanuserip ²ÎÊı)
+# 2. è·å– WAN å£ IP (å³ wlanuserip å‚æ•°)
 get_wan_ip() {
-    # ³¢ÊÔ´Ó WAN ½Ó¿Ú»ñÈ¡ IP µØÖ·
+    # å°è¯•ä» WAN æ¥å£è·å– IP åœ°å€
     WAN_IP=$(/sbin/ifconfig "${WAN_INTERFACE}" | grep 'inet addr' | awk -F: '{print $2}' | awk '{print $1}')
     
     if [ -z "${WAN_IP}" ]; then
-        echo "$(date) - ´íÎó£ºÎŞ·¨»ñÈ¡ ${WAN_INTERFACE} µÄ IP µØÖ·£¡"
+        echo "$(date) - é”™è¯¯ï¼šæ— æ³•è·å– ${WAN_INTERFACE} çš„ IP åœ°å€ï¼"
         return 1
     fi
     echo "${WAN_IP}"
     return 0
 }
 
-# 3. Éú³É UUID (Ê¹ÓÃ OpenWrt µÄ /proc/sys/kernel/random/uuid)
+# 3. ç”Ÿæˆ UUID (ä½¿ç”¨ OpenWrt çš„ /proc/sys/kernel/random/uuid)
 get_uuid() {
-    # ³¢ÊÔ´Ó /proc ÎÄ¼ş¶ÁÈ¡£¬Ê§°ÜÔò³¢ÊÔÓÃ od Éú³É
+    # å°è¯•ä» /proc æ–‡ä»¶è¯»å–ï¼Œå¤±è´¥åˆ™å°è¯•ç”¨ od ç”Ÿæˆ
     cat /proc/sys/kernel/random/uuid 2>/dev/null || od -x /dev/urandom | head -1 | awk '{print $2$3"-"$4"-"$5"-"$6"-"$7}'
 }
 
-# 4. Éú³É 13 Î»ºÁÃëÊ±¼ä´Á
+# 4. ç”Ÿæˆ 13 ä½æ¯«ç§’æ—¶é—´æˆ³
 get_timestamp() {
-    # OpenWrt ash Ä¬ÈÏ²»Ö§³Ö date +%s%3N£¬Ê¹ÓÃ $(date +%s) * 1000 Ä£Äâ
+    # OpenWrt ash é»˜è®¤ä¸æ”¯æŒ date +%s%3Nï¼Œä½¿ç”¨ $(date +%s) * 1000 æ¨¡æ‹Ÿ
     TIMESTAMP_S=$(date +%s)
-    # Ä£ÄâºÁÃëÊ±¼ä´Á£¬¼òµ¥³ËÒÔ 1000
+    # æ¨¡æ‹Ÿæ¯«ç§’æ—¶é—´æˆ³ï¼Œç®€å•ä¹˜ä»¥ 1000
     echo "$((${TIMESTAMP_S}000 + 0))" 
 }
 
-# 5. Ö´ĞĞµÇÂ¼²Ù×÷
+# 5. æ‰§è¡Œç™»å½•æ“ä½œ
 do_login() {
     WAN_IP=$(get_wan_ip)
     if [ $? -ne 0 ]; then
@@ -84,7 +84,7 @@ do_login() {
     TIMESTAMP=$(get_timestamp)
     UUID=$(get_uuid)
     
-    # ¹¹ÔìÍêÕûµÄ²éÑ¯²ÎÊı×Ö·û´®
+    # æ„é€ å®Œæ•´çš„æŸ¥è¯¢å‚æ•°å­—ç¬¦ä¸²
     QUERY_PARAMS="\
 userid=${FULL_USERID}&\
 passwd=${PASSWORD}&\
@@ -98,32 +98,32 @@ uuid=${UUID}&\
 portaltype=${PORTAL_TYPE}&\
 hostname=&bindCtrlId="
 
-    # URL ±àÂë£¬±ÜÃâÌØÊâ×Ö·ûÎÊÌâ (ÓÈÆäÊÇ @ ·ûºÅ)
+    # URL ç¼–ç ï¼Œé¿å…ç‰¹æ®Šå­—ç¬¦é—®é¢˜ (å°¤å…¶æ˜¯ @ ç¬¦å·)
     ENCODED_PARAMS=$(echo "${QUERY_PARAMS}" | sed 's/@/%40/g')
 
     FINAL_URL="${LOGIN_URL}?${ENCODED_PARAMS}"
 
-    echo "$(date) - Starting authentication...  # ÕıÔÚ³¢ÊÔÈÏÖ¤"
+    echo "$(date) - Starting authentication...  # æ­£åœ¨å°è¯•è®¤è¯"
     echo "Account: ${FULL_USERID}"
     echo "Client IP: ${WAN_IP}"
     echo "Using UA: Mobile"
 
-    # Ê¹ÓÃ curl ·¢ËÍ GET ÇëÇó
-    # -G: Ç¿ÖÆ GET, -s: ¾²Ä¬, -k: ºöÂÔÖ¤Êé, --connect-timeout 5
-    # -A "${MOBILE_UA}": ÉèÖÃ User-Agent Í·²¿ - ¡¾ÒÑĞŞ¸Ä¡¿
-    # -o /dev/null: ²»Êä³ö·µ»ØÄÚÈİ, -w "%{http_code}" Êä³ö HTTP ×´Ì¬Âë
+    # ä½¿ç”¨ curl å‘é€ GET è¯·æ±‚
+    # -G: å¼ºåˆ¶ GET, -s: é™é»˜, -k: å¿½ç•¥è¯ä¹¦, --connect-timeout 5
+    # -A "${MOBILE_UA}": è®¾ç½® User-Agent å¤´éƒ¨ - ã€å·²ä¿®æ”¹ã€‘
+    # -o /dev/null: ä¸è¾“å‡ºè¿”å›å†…å®¹, -w "%{http_code}" è¾“å‡º HTTP çŠ¶æ€ç 
     HTTP_CODE=$(curl -G -s -k -o /dev/null -w "%{http_code}" -A "${MOBILE_UA}" "${FINAL_URL}" --connect-timeout 5)
 
     if [ "$HTTP_CODE" = "200" ]; then
-        # ÈÏÖ¤³É¹¦ºóÍ¨³£»á·µ»Ø 200 ºÍ JSON Êı¾İ
-        echo "$(date) - [${HTTP_CODE}] Auth request sent, waiting for network.   |  # ÈÏÖ¤ÇëÇó·¢ËÍ³É¹¦"
+        # è®¤è¯æˆåŠŸåé€šå¸¸ä¼šè¿”å› 200 å’Œ JSON æ•°æ®
+        echo "$(date) - [${HTTP_CODE}] Auth request sent, waiting for network.   |  # è®¤è¯è¯·æ±‚å‘é€æˆåŠŸ"
     else
-        echo "$(date) - [${HTTP_CODE}] Auth request failed.  |  # ÈÏÖ¤ÇëÇóÊ§°Ü"
+        echo "$(date) - [${HTTP_CODE}] Auth request failed.  |  # è®¤è¯è¯·æ±‚å¤±è´¥"
     fi
 }
 
-# 6. Ö÷Á÷³Ì
+# 6. ä¸»æµç¨‹
 
      do_login
-     sleep 5 # µÈ´ı 5 Ãë£¬ÈÃÈÏÖ¤ÉúĞ§
+     sleep 5 # ç­‰å¾… 5 ç§’ï¼Œè®©è®¤è¯ç”Ÿæ•ˆ
   
